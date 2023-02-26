@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  title: MyString
+  description: MyText
+  priority: 1
+  status: 1
+  deadline: 2023-02-26 18:45:39
+
+two:
+  user: two
+  title: MyString
+  description: MyText
+  priority: 1
+  status: 1
+  deadline: 2023-02-26 18:45:39
