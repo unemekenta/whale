@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
       resources :tasks do
         resources :comments
+        resources :taggings, only: [:index, :create, :destroy]
       end
       resources :users, only: [:show]
 
