@@ -14,7 +14,7 @@ module Api
       def create
         session_options_skip
         user = User.find_by(email: params[:uid])
-        task = Task.new(title: params[:title], description: params[:description], user_id: user.id)
+        task = Task.new(title: params[:title], description: params[:description], user_id: user.id, priority: params[:priority], status: params[:status], deadline: params[:deadline])
         task.save
         return_data(STATUS_SUCCESS, '', task)
       end
@@ -46,7 +46,7 @@ module Api
       end
 
       def task_params
-        params.permit(:title, :description)
+        params.permit(:title, :description, :priority, :status, :deadline)
       end
     end
   end
