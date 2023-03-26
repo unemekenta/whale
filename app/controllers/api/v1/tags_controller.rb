@@ -7,7 +7,7 @@ module Api
 
       def index
         session_options_skip
-        tasks = Tag.all
+        tasks = Tag.all.limit(INDEX_LIMIT).offset(params[:offset])
         return_data(STATUS_SUCCESS, '', tasks)
       end
 

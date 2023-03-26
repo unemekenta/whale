@@ -5,4 +5,6 @@ class ApplicationController < ActionController::API
   end
 
   STATUS_SUCCESS = 'SUCCESS'
+
+  INDEX_LIMIT = 1000
 end

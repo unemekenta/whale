@@ -7,7 +7,7 @@ module Api
 
       def index
         session_options_skip
-        taggings = Tagging.where(task_id: params[:task_id])
+        taggings = Tagging.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
         return_data(STATUS_SUCCESS, '', taggings)
       end
 

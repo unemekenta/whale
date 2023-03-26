@@ -7,7 +7,7 @@ module Api
 
       def index
         session_options_skip
-        comments = Comment.where(task_id: params[:task_id])
+        comments = Comment.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
         return_data(STATUS_SUCCESS, '', comments)
       end
 

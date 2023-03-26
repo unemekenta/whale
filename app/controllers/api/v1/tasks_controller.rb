@@ -7,8 +7,8 @@ module Api
 
       def index
         session_options_skip
-        tasks = Task.where(user_id: @current_api_v1_user.id)
-        return_data(STATUS_SUCCESS, '', JSON.parse(tasks.to_json(include: {tags: {only: :name}}, except: [:created_at])))
+        tasks = Task.where(user_id: @current_api_v1_user.id).limit(INDEX_LIMIT).offset(params[:offset])
+        return_data(STATUS_SUCCESS, '', JSON.parse(task_res_fmt(tasks)))
       end
 
       def create
@@ -21,7 +21,7 @@ module Api
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', JSON.parse(@task.to_json(include: {tags: {only: :name}}, except: [:created_at])))
+        return_data(STATUS_SUCCESS, '', JSON.parse(task_res_fmt(@task)))
       end
 
       def update
@@ -48,6 +48,11 @@ module Api
       def task_params
         params.permit(:title, :description, :priority, :status, :deadline)
       end
+
+      def task_res_fmt(task)
+        task.to_json(include: [:tags, user: {only: [:id, :nickname, :image]}, comments: {include: {user: {only: [:id, :nickname, :image]}}, only: [:id, :content, :updated_at]}], except: [:created_at, :user_id])
+      end
+
     end
   end
 end
