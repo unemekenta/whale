@@ -8,7 +8,7 @@ module Api
       def index
         session_options_skip
         tasks = Task.where(user_id: @current_api_v1_user.id)
-        return_data(STATUS_SUCCESS, '', tasks)
+        return_data(STATUS_SUCCESS, '', JSON.parse(tasks.to_json(include: {tags: {only: :name}}, except: [:created_at])))
       end
 
       def create
@@ -21,7 +21,7 @@ module Api
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', @task)
+        return_data(STATUS_SUCCESS, '', JSON.parse(@task.to_json(include: {tags: {only: :name}}, except: [:created_at])))
       end
 
       def update
