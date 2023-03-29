@@ -4,11 +4,14 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
 
+      namespace :auth do
+        resources :sessions, only: %i[index]
+      end
+
       resources :tasks do
         resources :comments
         resources :taggings, only: [:index, :create, :destroy]
       end
-      resources :users, only: [:show]
 
       resources :tags
     end
