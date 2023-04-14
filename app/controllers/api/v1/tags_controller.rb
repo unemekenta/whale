@@ -38,6 +38,12 @@ module Api
         return_data(STATUS_SUCCESS, 'Deleted the tag', @tag)
       end
 
+      def search
+        session_options_skip
+        @tags = Tag.search(params[:keyword])
+        return_data(STATUS_SUCCESS, '', @tags)
+      end
+
       private
       def set_tag
         session_options_skip

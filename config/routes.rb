@@ -13,7 +13,11 @@ Rails.application.routes.draw do
         resources :taggings, only: [:index, :create, :destroy]
       end
 
-      resources :tags
+      resources :tags do
+        collection do
+          get 'search', to: 'tags#search'
+        end
+      end
     end
   end
 end

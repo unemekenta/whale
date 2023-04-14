@@ -37,6 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_100536) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name"
   end
 
   create_table "tasks", force: :cascade do |t|
