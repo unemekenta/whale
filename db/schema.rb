@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_100536) do
     t.bigint "task_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["tag_id", "task_id"], name: "index_taggings_on_tag_id_and_task_id", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["task_id"], name: "index_taggings_on_task_id"
   end
