@@ -7,6 +7,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable, :trackable
   include DeviseTokenAuth::Concerns::User
 
-  has_many :tasks
-  has_many :comments
+  has_many :tasks, dependent: :destroy
+  has_many :comments, dependent: :destroy
 end

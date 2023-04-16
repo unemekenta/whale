@@ -1,6 +1,5 @@
 class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.0]
-  def change
-    
+  def up
     create_table(:users) do |t|
       ## Required
       t.string :provider, :null => false, :default => "email"
@@ -52,5 +51,13 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.0]
     add_index :users, :reset_password_token, unique: true
     add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
+  end
+
+  def down
+    remove_index :users, :email
+    remove_index :users, [:uid, :provider]
+    remove_index :users, :reset_password_token
+    remove_index :users, :confirmation_token
+    drop_table :users
   end
 end
