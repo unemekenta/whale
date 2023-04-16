@@ -13,9 +13,11 @@ module Api
 
       def create
         session_options_skip
-        tagging = Tagging.new(task_id: params[:task_id], tag_id: params[:tag_id])
-        tagging.save
-        return_data(STATUS_SUCCESS, '', tagging)
+        params[:tagging].each do |t|
+          tagging = Tagging.new(task_id: params[:task_id], tag_id: t[:tag_id])
+          tagging.save
+        end
+        return_data(STATUS_SUCCESS, '', "")
       end
 
       def destroy
