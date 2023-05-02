@@ -18,6 +18,9 @@ Rails.application.routes.draw do
           get 'search', to: 'tags#search'
         end
       end
+
+      resources :diaries do
+      end
     end
   end
 end
