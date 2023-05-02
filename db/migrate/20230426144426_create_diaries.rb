@@ -5,6 +5,7 @@ class CreateDiaries < ActiveRecord::Migration[7.0]
       t.string :title
       t.text :content
       t.boolean :public, null: false, :default => false
+      t.date :date
       t.timestamps
     end
   end

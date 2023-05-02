@@ -18,7 +18,7 @@ module Api
       def create
         session_options_skip
         user = User.find_by(email: params[:uid])
-        diary = Diary.new(title: params[:title], content: params[:content], public: params[:public], user_id: user.id)
+        diary = Diary.new(title: params[:title], content: params[:content], public: params[:public], date: params[:date], user_id: user.id)
         diary.save
         return_data(STATUS_SUCCESS, '', diary)
       end
@@ -44,7 +44,7 @@ module Api
       end
 
       def diary_params
-        params.permit(:title, :content, :public)
+        params.permit(:title, :content, :public, :date)
       end
 
     end

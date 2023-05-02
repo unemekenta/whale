@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_26_144426) do
     t.string "title"
     t.text "content"
     t.boolean "public", default: false, null: false
+    t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_diaries_on_user_id"
