@@ -37,6 +37,12 @@ module Api
         return_data(STATUS_SUCCESS, 'Deleted the diary', @diary)
       end
 
+      def timeline
+        session_options_skip
+        diaries = Diary.where(public: true).limit(INDEX_LIMIT).offset(params[:offset]).order(updated_at: :desc)
+        return_data(STATUS_SUCCESS, '', diaries)
+      end
+
       private
       def set_diary
         session_options_skip

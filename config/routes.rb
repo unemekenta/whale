@@ -20,6 +20,9 @@ Rails.application.routes.draw do
       end
 
       resources :diaries do
+        collection do
+          get 'timeline', to: 'diaries#timeline'
+        end
       end
     end
   end
