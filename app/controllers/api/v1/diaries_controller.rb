@@ -7,7 +7,7 @@ module Api
 
       def index
         session_options_skip
-        diaries = Diary.where(user_id: @current_api_v1_user.id).limit(INDEX_LIMIT).offset(params[:offset])
+        diaries = Diary.where(user_id: @current_api_v1_user.id).limit(INDEX_LIMIT).offset(params[:offset]).order(date: :desc)
         return_data(STATUS_SUCCESS, '', diaries)
       end
 
@@ -39,7 +39,7 @@ module Api
 
       def timeline
         session_options_skip
-        diaries = Diary.where(public: true).limit(INDEX_LIMIT).offset(params[:offset]).order(updated_at: :desc)
+        diaries = Diary.where(public: true).limit(INDEX_LIMIT).offset(params[:offset]).order(date: :desc)
         return_data(STATUS_SUCCESS, '', diaries)
       end
 
