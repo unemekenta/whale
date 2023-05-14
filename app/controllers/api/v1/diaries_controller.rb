@@ -2,7 +2,7 @@ module Api
   module V1
     class DiariesController < ApplicationController
       before_action :authenticate_api_v1_user!
-      before_action :set_diary, only: [:show, :update, :destroy]
+      before_action :set_diary, only: [:update, :destroy]
       include ReturnData
 
       def index
@@ -12,7 +12,8 @@ module Api
       end
 
       def show
-        return_data(STATUS_SUCCESS, '', @diary)
+        diary = Diary.where(id: params[:id], user_id: @current_api_v1_user.id).or(Diary.where(id: params[:id], public: true)).first
+        return_data(STATUS_SUCCESS, '', diary)
       end
 
       def create
