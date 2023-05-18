@@ -34,25 +34,32 @@ module Api
 
       def update
         ActiveRecord::Base.transaction do
-          session_options_skip
-          if @task.update(task_params)
-            # TODO: リファクタ
-            @tagging.destroy_all
-            params[:taggings].each do |t|
-              tagging = Tagging.new(task_id: @task.id, tag_id: t[:tag_id])
-              tagging.save
+          if @task.user_id == @current_api_v1_user.id
+            if @task.update(task_params)
+              # TODO: リファクタ
+              @tagging.destroy_all
+              params[:taggings].each do |t|
+                tagging = Tagging.new(task_id: @task.id, tag_id: t[:tag_id])
+                tagging.save
+              end
+              return_data(STATUS_SUCCESS, 'Updated the task', @task)
+            else
+              return_data(STATUS_FAILURE, 'Not updated', @task.errors)
             end
-            return_data(STATUS_SUCCESS, 'Updated the task', @task)
           else
-            return_data(STATUS_SUCCESS, 'Not updated', @task.errors)
+            return_data(STATUS_FAILURE, 'You are not authorized to update this task', '')
           end
         end
       end
 
       def destroy
         session_options_skip
-        @task.destroy
-        return_data(STATUS_SUCCESS, 'Deleted the task', @task)
+        if @task.user_id == @current_api_v1_user.id
+          @task.destroy
+          return_data(STATUS_SUCCESS, 'Deleted the task', @task)
+        else
+          return_data(STATUS_FAILURE, 'You are not authorized to delete this task', '')
+        end
       end
 
       private

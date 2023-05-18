@@ -12,6 +12,7 @@ module Api
       end
 
       def show
+        session_options_skip
         diary = Diary.where(id: params[:id], user_id: @current_api_v1_user.id).or(Diary.where(id: params[:id], public: true)).first
         return_data(STATUS_SUCCESS, '', diary)
       end
@@ -25,17 +26,24 @@ module Api
       end
 
       def update
-        session_options_skip
-        if @diary.update(diary_params)
-          return_data(STATUS_SUCCESS, 'Updated the diary', @diary)
+        if @diary.user_id == @current_api_v1_user.id
+          if @diary.update(diary_params)
+            return_data(STATUS_SUCCESS, 'Updated the diary', @diary)
+          else
+            return_data(STATUS_SUCCESS, 'Not updated', @diary.errors)
+          end
         else
-          return_data(STATUS_SUCCESS, 'Not updated', @diary.errors)
+          return_data(STATUS_FAILURE, 'You are not authorized to update this diary', '')
         end
       end
 
       def destroy
-        @diary.destroy
-        return_data(STATUS_SUCCESS, 'Deleted the diary', @diary)
+        if @diary.user_id == @current_api_v1_user.id
+          @diary.destroy
+          return_data(STATUS_SUCCESS, 'Deleted the diary', @diary)
+        else
+          return_data(STATUS_FAILURE, 'You are not authorized to delete this diary', '')
+        end
       end
 
       def timeline

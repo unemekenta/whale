@@ -24,6 +24,8 @@ Rails.application.routes.draw do
           get 'timeline', to: 'diaries#timeline'
         end
       end
+
+      resources :images, only: [:index, :show, :create, :destroy]
     end
   end
 end

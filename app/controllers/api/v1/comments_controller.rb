@@ -26,17 +26,25 @@ module Api
 
       def update
         session_options_skip
-        if @comment.update(comment_params)
-          return_data(STATUS_SUCCESS, 'Updated the comment', @comment)
+        if @comment.user_id == @current_api_v1_user.id
+          if @comment.update(comment_params)
+            return_data(STATUS_SUCCESS, 'Updated the comment', @comment)
+          else
+            return_data(STATUS_SUCCESS, 'Not updated', @comment.errors)
+          end
         else
-          return_data(STATUS_SUCCESS, 'Not updated', @comment.errors)
+          return_data(STATUS_FAILURE, 'You are not authorized to update this comment', '')
         end
       end
 
       def destroy
         session_options_skip
-        @comment.destroy
-        return_data(STATUS_SUCCESS, 'Deleted the comment', @comment)
+        if @comment.user_id == @current_api_v1_user.id
+          @comment.destroy
+          return_data(STATUS_SUCCESS, 'Deleted the comment', @comment)
+        else
+          return_data(STATUS_FAILURE, 'You are not authorized to delete this comment', '')
+        end
       end
 
       private

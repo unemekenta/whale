@@ -48,3 +48,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'devise'
 gem 'devise_token_auth'
 gem 'devise-i18n'
+
+gem 'carrierwave'
+gem 'mini_magick'
