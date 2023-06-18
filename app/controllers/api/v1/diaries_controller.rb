@@ -18,11 +18,21 @@ module Api
       end
 
       def create
-        session_options_skip
-        user = User.find_by(email: params[:uid])
-        diary = Diary.new(title: params[:title], content: params[:content], public: params[:public], date: params[:date], user_id: user.id)
-        diary.save
-        return_data(STATUS_SUCCESS, '', diary)
+        ActiveRecord::Base.transaction do
+          session_options_skip
+          user = User.find_by(email: params[:uid])
+          diary = Diary.new(title: params[:title], content: params[:content], public: params[:public], date: params[:date], user_id: user.id)
+          diary.save
+
+          if params[:diaries_image_relation].present?
+            diaries_image_relation_params = JSON.parse(params[:diaries_image_relation])
+            diaries_image_relation_params.each do |t|
+              diaries_image_relation = DiariesImageRelation.new(diary_id: diary.id, image_id: t['image_id'])
+              diaries_image_relation.save
+            end
+          end
+          return_data(STATUS_SUCCESS, '', diary)
+        end
       end
 
       def update

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       end
 
       resources :diaries do
+        resources :diaries_image_relations, only: [:create, :destroy]
         collection do
           get 'timeline', to: 'diaries#timeline'
         end
