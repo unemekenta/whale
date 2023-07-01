@@ -4,6 +4,9 @@ class Image < ApplicationRecord
   validates :image, presence: true
   validate :validate_image_file_size
 
+  has_many :diaries_image_relations
+  has_many :diaries, through: :diaries_image_relations
+
   private
 
   def validate_image_file_size

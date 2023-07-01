@@ -13,7 +13,12 @@ module Api
 
       def show
         session_options_skip
-        diary = Diary.where(id: params[:id], user_id: @current_api_v1_user.id).or(Diary.where(id: params[:id], public: true)).first
+        diary = Diary.includes(:images)
+          .where("(id = ? AND user_id = ?) OR (id = ? AND public = ?)",
+            params[:id], @current_api_v1_user.id,
+            params[:id], true)
+          .first
+          .as_json(include: :images)
         return_data(STATUS_SUCCESS, '', diary)
       end
 
