@@ -33,7 +33,7 @@ module Api
           diary.save
 
           if params[:diaries_image_relations].present?
-            diaries_image_relation_params = JSON.parse(params[:diaries_image_relation])
+            diaries_image_relation_params = JSON.parse(params[:diaries_image_relations])
             diaries_image_relation_params.each do |dir_id|
               diaries_image_relation = DiariesImageRelation.new(diary_id: diary.id, image_id: dir_id)
               diaries_image_relation.save
