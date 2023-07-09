@@ -4,6 +4,14 @@ class ApplicationController < ActionController::API
     I18n.locale = :ja
   end
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  # user情報を変更可能にする例
+  def configure_permitted_parameters
+    request.session_options[:skip] = true
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :nickname, :image])
+  end
+
   STATUS_SUCCESS = 'SUCCESS'
   STATUS_FAILURE = 'ERROR'
 
