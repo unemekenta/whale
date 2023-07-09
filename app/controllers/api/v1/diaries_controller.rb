@@ -21,7 +21,7 @@ module Api
             params[:id], @current_api_v1_user.id,
             params[:id], true)
           .first
-          .as_json(include: [:diaries_image_relations, :images])
+          .as_json(include: [:diaries_image_relations, :images, user: {only: [:id, :nickname, :image]}])
         return_data(STATUS_SUCCESS, '', diary)
       end
 
@@ -81,8 +81,13 @@ module Api
 
       def timeline
         session_options_skip
-        diaries = Diary.where(public: true).limit(INDEX_LIMIT).offset(params[:offset]).order(date: :desc)
-        return_data(STATUS_SUCCESS, '', diaries)
+        diaries = Diary.
+          joins(:user).
+          where(public: true).
+          limit(INDEX_LIMIT).
+          offset(params[:offset]).
+          order(date: :desc)
+        return_data(STATUS_SUCCESS, '', JSON.parse(diary_res_fmt(diaries)))
       end
 
       private
@@ -93,6 +98,10 @@ module Api
 
       def diary_params
         params.permit(:title, :content, :public, :date)
+      end
+
+      def diary_res_fmt(diary)
+        diary.to_json(include: [user: {only: [:id, :nickname, :image]}])
       end
 
     end
