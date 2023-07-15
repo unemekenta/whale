@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_03_142820) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_12_142401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_142820) do
     t.index ["diary_id", "image_id"], name: "index_diaries_image_relations_on_diary_id_and_image_id", unique: true
     t.index ["diary_id"], name: "index_diaries_image_relations_on_diary_id"
     t.index ["image_id"], name: "index_diaries_image_relations_on_image_id"
+  end
+
+  create_table "diary_comments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "diary_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diary_id"], name: "index_diary_comments_on_diary_id"
+    t.index ["user_id"], name: "index_diary_comments_on_user_id"
   end
 
   create_table "images", force: :cascade do |t|
@@ -121,6 +131,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_03_142820) do
   add_foreign_key "diaries", "users"
   add_foreign_key "diaries_image_relations", "diaries", on_delete: :cascade
   add_foreign_key "diaries_image_relations", "images"
+  add_foreign_key "diary_comments", "diaries"
+  add_foreign_key "diary_comments", "users"
   add_foreign_key "images", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tasks"
