@@ -16,12 +16,16 @@ module Api
 
       def show
         session_options_skip
-        diary = Diary.includes(diaries_image_relations: :image)
+        diary = Diary.includes(diary_comments: :user, diaries_image_relations: :image)
           .where("(id = ? AND user_id = ?) OR (id = ? AND public = ?)",
             params[:id], @current_api_v1_user.id,
             params[:id], true)
           .first
-          .as_json(include: [:diaries_image_relations, :images, user: {only: [:id, :nickname, :image]}])
+          .as_json(include: [
+            :diaries_image_relations,
+            :images,
+            diary_comments: { include: { user: { only: [:id, :nickname, :image] } } },
+            user: {only: [:id, :nickname, :image]}])
         return_data(STATUS_SUCCESS, '', diary)
       end
 
