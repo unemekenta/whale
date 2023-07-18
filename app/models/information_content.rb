@@ -1,0 +1,3 @@
+class InformationContent < ApplicationRecord
+
+end

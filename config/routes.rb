@@ -28,6 +28,8 @@ Rails.application.routes.draw do
       end
 
       resources :images, only: [:index, :show, :create, :destroy]
+
+      resources :information_contents, only: [:index]
     end
   end
 end
