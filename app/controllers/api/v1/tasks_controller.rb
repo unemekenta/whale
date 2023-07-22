@@ -74,7 +74,7 @@ module Api
       end
 
       def task_res_fmt(task)
-        task.to_json(include: [:tags, user: {only: [:id, :nickname, :image]}, taggings:{only: [:tag_id]}, comments: {include: {user: {only: [:id, :nickname, :image]}}, only: [:id, :content, :updated_at]}], except: [:created_at, :user_id])
+        task.to_json(include: [:tags, user: {only: [:id, :nickname, :image]}, taggings:{only: [:tag_id]}, comments: {include: {user: {only: [:id, :nickname, :image]}}}], except: [:created_at, :user_id])
       end
 
     end
