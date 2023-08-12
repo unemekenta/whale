@@ -3,12 +3,12 @@ module Api
     class TasksController < ApplicationController
       before_action :set_task, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
-      include ReturnData
+      include ApiResponse
 
       def index
         session_options_skip
         tasks = Task.where(user_id: @current_api_v1_user.id).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data(STATUS_SUCCESS, '', JSON.parse(task_res_fmt(tasks)))
+        return_data('', JSON.parse(task_res_fmt(tasks)))
       end
 
       def create
@@ -23,13 +23,17 @@ module Api
             tagging = Tagging.new(task_id: task.id, tag_id: t[:tag_id])
             tagging.save
           end
-          return_data(STATUS_SUCCESS, '', task)
+          return_data('', task)
         end
       end
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', JSON.parse(task_res_fmt(@task)))
+        if @task.user_id == @current_api_v1_user.id
+          return_data('', JSON.parse(task_res_fmt(@task)))
+        else
+          return_error('You are not authorized to delete this task', '')
+        end
       end
 
       def update
@@ -42,12 +46,12 @@ module Api
                 tagging = Tagging.new(task_id: @task.id, tag_id: t[:tag_id])
                 tagging.save
               end
-              return_data(STATUS_SUCCESS, 'Updated the task', @task)
+              return_data('Updated the task', @task)
             else
-              return_data(STATUS_FAILURE, 'Not updated', @task.errors)
+              return_error('Not updated', @task.errors)
             end
           else
-            return_data(STATUS_FAILURE, 'You are not authorized to update this task', '')
+            return_error('You are not authorized to update this task', '')
           end
         end
       end
@@ -56,9 +60,9 @@ module Api
         session_options_skip
         if @task.user_id == @current_api_v1_user.id
           @task.destroy
-          return_data(STATUS_SUCCESS, 'Deleted the task', @task)
+          return_data('Deleted the task', @task)
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to delete this task', '')
+          return_error('You are not authorized to delete this task', '')
         end
       end
 

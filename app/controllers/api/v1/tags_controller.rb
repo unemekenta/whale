@@ -3,45 +3,45 @@ module Api
     class TagsController < ApplicationController
       before_action :set_tag, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
-      include ReturnData
+      include ApiResponse
 
       def index
         session_options_skip
         tasks = Tag.all.limit(INDEX_LIMIT).offset(params[:offset])
-        return_data(STATUS_SUCCESS, '', tasks)
+        return_data('', tasks)
       end
 
       def create
         session_options_skip
         tag = Tag.new(name: params[:name])
         tag.save
-        return_data(STATUS_SUCCESS, '', tag)
+        return_data('', tag)
       end
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', @tag)
+        return_data('', @tag)
       end
 
       def update
         session_options_skip
         if @tag.update(tag_params)
-          return_data(STATUS_SUCCESS, 'Updated the tag', @tag)
+          return_data('Updated the tag', @tag)
         else
-          return_data(STATUS_SUCCESS, 'Not updated', @tag.errors)
+          return_data('Not updated', @tag.errors)
         end
       end
 
       def destroy
         session_options_skip
         @tag.destroy
-        return_data(STATUS_SUCCESS, 'Deleted the tag', @tag)
+        return_data('Deleted the tag', @tag)
       end
 
       def search
         session_options_skip
         @tags = Tag.search(params[:keyword])
-        return_data(STATUS_SUCCESS, '', @tags)
+        return_data('', @tags)
       end
 
       private

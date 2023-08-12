@@ -12,8 +12,5 @@ class ApplicationController < ActionController::API
     devise_parameter_sanitizer.permit(:account_update, keys: [:name, :nickname, :image])
   end
 
-  STATUS_SUCCESS = 'SUCCESS'
-  STATUS_FAILURE = 'ERROR'
-
   INDEX_LIMIT = 1000
 end

@@ -3,7 +3,7 @@ module Api
     class DiariesController < ApplicationController
       before_action :authenticate_api_v1_user!
       before_action :set_diary, only: [:update, :destroy]
-      include ReturnData
+      include ApiResponse
 
       def index
         session_options_skip
@@ -11,24 +11,24 @@ module Api
           .limit(INDEX_LIMIT)
           .offset(params[:offset])
           .order(date: :desc)
-        return_data(STATUS_SUCCESS, '', diaries)
+        return_data('', diaries)
       end
 
       def show
         session_options_skip
         diary = Diary.includes(diary_comments: :user, diaries_image_relations: :image)
-          .where("(id = ? AND user_id = ?) OR (id = ? AND public = ?)",
+          .where("(id = ? AND user_id = ?) OR (id = ? AND is_public = ?)",
             params[:id], @current_api_v1_user.id,
             params[:id], true)
           .first
-        return_data(STATUS_SUCCESS, '', JSON.parse(diary_res_fmt(diary)))
+        return_data('', JSON.parse(diary_res_fmt(diary)))
       end
 
       def create
         ActiveRecord::Base.transaction do
           session_options_skip
           user = User.find_by(email: params[:uid])
-          diary = Diary.new(title: params[:title], content: params[:content], public: params[:public], date: params[:date], user_id: user.id)
+          diary = Diary.new(title: params[:title], content: params[:content], is_public: params[:is_public], date: params[:date], user_id: user.id)
           diary.save
 
           if params[:diaries_image_relations].present?
@@ -38,7 +38,7 @@ module Api
               diaries_image_relation.save
             end
           end
-          return_data(STATUS_SUCCESS, '', diary)
+          return_data('', diary)
         end
       end
 
@@ -59,12 +59,12 @@ module Api
           end
           if @diary.user_id == @current_api_v1_user.id
             if @diary.update(diary_params)
-              return_data(STATUS_SUCCESS, 'Updated the diary', @diary)
+              return_data('Updated the diary', @diary)
             else
-              return_data(STATUS_SUCCESS, 'Not updated', @diary.errors)
+              return_data('Not updated', @diary.errors)
             end
           else
-            return_data(STATUS_FAILURE, 'You are not authorized to update this diary', '')
+            return_error('You are not authorized to update this diary', )
           end
         end
       end
@@ -72,9 +72,9 @@ module Api
       def destroy
         if @diary.user_id == @current_api_v1_user.id
           @diary.destroy
-          return_data(STATUS_SUCCESS, 'Deleted the diary', @diary)
+          return_data('Deleted the diary', @diary)
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to delete this diary', '')
+          return_error('You are not authorized to delete this diary', '')
         end
       end
 
@@ -83,11 +83,11 @@ module Api
         diaries = Diary.
           includes(diary_comments: :user, diaries_image_relations: :image).
           joins(:user).
-          where(public: true).
+          where(is_public: true).
           limit(INDEX_LIMIT).
           offset(params[:offset]).
           order(date: :desc)
-        return_data(STATUS_SUCCESS, '', JSON.parse(diary_res_fmt(diaries)))
+        return_data('', JSON.parse(diary_res_fmt(diaries)))
       end
 
       private
@@ -97,7 +97,7 @@ module Api
       end
 
       def diary_params
-        params.permit(:title, :content, :public, :date)
+        params.permit(:title, :content, :is_public, :date)
       end
 
       def diary_res_fmt(diary)

@@ -4,16 +4,16 @@ module Api
       before_action :set_comment, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
 
-      include ReturnData
+      include ApiResponse
       def index
         session_options_skip
         comments = DiaryComment.where(diary_id: params[:diary_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data(STATUS_SUCCESS, '', comments)
+        return_data('', comments)
       end
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', @diary_comment)
+        return_data('', @diary_comment)
       end
 
       def create
@@ -21,19 +21,19 @@ module Api
         user = User.find_by(email: params[:uid])
         comment = DiaryComment.new(content: params[:content], diary_id: params[:diary_id], user_id: user.id)
         comment.save
-        return_data(STATUS_SUCCESS, '', comment)
+        return_data('', comment)
       end
 
       def update
         session_options_skip
         if @diary_comment.user_id == @current_api_v1_user.id
           if @diary_comment.update(comment_params)
-            return_data(STATUS_SUCCESS, 'Updated the comment', @diary_comment)
+            return_data('Updated the comment', @diary_comment)
           else
-            return_data(STATUS_SUCCESS, 'Not updated', @diary_comment.errors)
+            return_data('Not updated', @diary_comment.errors)
           end
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to update this comment', '')
+          return_error('You are not authorized to update this comment', '')
         end
       end
 
@@ -42,9 +42,9 @@ module Api
         Rails.logger.debug("ここ#{@diary_comment}")
         if @diary_comment.user_id == @current_api_v1_user.id
           @diary_comment.destroy
-          return_data(STATUS_SUCCESS, 'Deleted the comment', @diary_comment)
+          return_data('Deleted the comment', @diary_comment)
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to delete this comment', '')
+          return_error('You are not authorized to delete this comment', '')
         end
       end
 

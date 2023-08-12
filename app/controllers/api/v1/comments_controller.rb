@@ -3,17 +3,17 @@ module Api
     class CommentsController < ApplicationController
       before_action :set_comment, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
-      include ReturnData
+      include ApiResponse
 
       def index
         session_options_skip
         comments = Comment.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data(STATUS_SUCCESS, '', comments)
+        return_data('', comments)
       end
 
       def show
         session_options_skip
-        return_data(STATUS_SUCCESS, '', @comment)
+        return_data('', @comment)
       end
 
       def create
@@ -21,19 +21,19 @@ module Api
         user = User.find_by(email: params[:uid])
         comment = Comment.new(content: params[:content], task_id: params[:task_id], user_id: user.id)
         comment.save
-        return_data(STATUS_SUCCESS, '', comment)
+        return_data('', comment)
       end
 
       def update
         session_options_skip
         if @comment.user_id == @current_api_v1_user.id
           if @comment.update(comment_params)
-            return_data(STATUS_SUCCESS, 'Updated the comment', @comment)
+            return_data('Updated the comment', @comment)
           else
-            return_data(STATUS_SUCCESS, 'Not updated', @comment.errors)
+            return_data('Not updated', @comment.errors)
           end
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to update this comment', '')
+          return_error('You are not authorized to update this comment', '')
         end
       end
 
@@ -41,9 +41,9 @@ module Api
         session_options_skip
         if @comment.user_id == @current_api_v1_user.id
           @comment.destroy
-          return_data(STATUS_SUCCESS, 'Deleted the comment', @comment)
+          return_data('Deleted the comment', @comment)
         else
-          return_data(STATUS_FAILURE, 'You are not authorized to delete this comment', '')
+          return_error('You are not authorized to delete this comment', '')
         end
       end
 

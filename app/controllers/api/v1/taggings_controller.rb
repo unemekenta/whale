@@ -3,12 +3,12 @@ module Api
     class TaggingsController < ApplicationController
       before_action :set_tagging, only: [:destroy]
       before_action :authenticate_api_v1_user!
-      include ReturnData
+      include ApiResponse
 
       def index
         session_options_skip
         taggings = Tagging.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data(STATUS_SUCCESS, '', taggings)
+        return_data('', taggings)
       end
 
       def create
@@ -17,13 +17,13 @@ module Api
           tagging = Tagging.new(task_id: params[:task_id], tag_id: t[:tag_id])
           tagging.save
         end
-        return_data(STATUS_SUCCESS, '', "")
+        return_data('', "")
       end
 
       def destroy
         session_options_skip
         @tagging.destroy
-        return_data(STATUS_SUCCESS, 'Deleted the tagging', @tagging)
+        return_data('Deleted the tagging', @tagging)
       end
 
       private
