@@ -17,4 +17,5 @@ jobs:
           username: ${{secrets.SSH_USERNAME}}
           port: ${{secrets.SSH_PORT}}
           script: |
+            cd whale
             git pull origin main     
