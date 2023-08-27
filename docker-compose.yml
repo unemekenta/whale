@@ -12,7 +12,7 @@ services:
     volumes:
       - .:/rails-api
     ports:
-      - "${API_HOST_PORT}:${API_HOST_PORT}:${API_CONTAINER_PORT}"
+      - "${API_HOST}:${API_HOST_PORT}:${API_CONTAINER_PORT}"
     depends_on:
       - db
     tty: true
