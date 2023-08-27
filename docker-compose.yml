@@ -4,7 +4,7 @@ services:
   rails-api:
     container_name: rails-api
     build: .
-    command: bundle exec rails s -p ${API_HOST_PORT}'
+    command: bundle exec rails s -p ${API_HOST_PORT}
     environment:
       RAILS_ENV: ${RAILS_ENV}
       POSTGRES_USER: ${DB_USER}
