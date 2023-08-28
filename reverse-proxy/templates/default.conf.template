@@ -12,7 +12,7 @@ server {
   }
 
   location / {
-    proxy_pass http://host.docker.internal:${API_CONTAINER_PORT}/;
+    proxy_pass http://${PROXY_HOST}:${API_CONTAINER_PORT}/;
     proxy_redirect off;
   }
 }
