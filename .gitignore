@@ -68,3 +68,6 @@ yarn-debug.log*
 /public/uploads
 
 database.yml
+
+*/conf.d/default.conf
+*/nginx.conf

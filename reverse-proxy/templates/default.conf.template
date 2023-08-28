@@ -1,0 +1,18 @@
+server {
+  listen ${REVERSE_PROXY_HOST_PORT};
+  server_name ${RAILS_ENV}-reverse-proxy;
+
+  set $ENV ${RAILS_ENV};
+  if ($ENV = 'docker-local') {
+    set $ALLOW_IPS true;
+  }
+
+  if ($ALLOW_IPS = 'false') {
+    return 403;
+  }
+
+  location / {
+    proxy_pass http://host.docker.internal:${API_CONTAINER_PORT}/;
+    proxy_redirect off;
+  }
+}
