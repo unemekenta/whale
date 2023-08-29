@@ -1,6 +1,6 @@
 server {
   listen ${REVERSE_PROXY_HOST_PORT};
-  # listen ${API_HOST_PORT};
+  listen ${API_HOST_PORT};
   server_name ${RAILS_ENV}-reverse-proxy;
 
   set $ENV ${RAILS_ENV};
@@ -17,10 +17,3 @@ server {
     proxy_redirect off;
   }
 }
-
-# server {
-#   listen ${DB_HOST_PORT};
-#   server_name ${RAILS_ENV}-db;
-
-#   return 403;
-# }
