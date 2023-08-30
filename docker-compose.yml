@@ -10,7 +10,8 @@ services:
     volumes:
       - .:/rails-api
     networks:
-      - whale-network
+      whale-network:
+        ipv4_address: ${API_CONTAINER_HOST}
     ports:
       - "${API_HOST_PORT}:${API_CONTAINER_PORT}"
     depends_on:
@@ -47,9 +48,16 @@ services:
       - "${PROXY_HOST}:host-gateway"
     networks:
       - whale-network
+    depends_on:
+      - rails-api
 
 volumes:
   postgres_volume:
 
 networks:
   whale-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${CONTAINER_NETWORK_SUBNET}

@@ -13,7 +13,7 @@ server {
   }
 
   location / {
-    proxy_pass http://${PROXY_HOST}:${API_CONTAINER_PORT}/;
+    proxy_pass http://rails-api/;
     proxy_redirect off;
   }
 }
