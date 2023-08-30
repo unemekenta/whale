@@ -1,6 +1,5 @@
 server {
   listen ${REVERSE_PROXY_HOST_PORT} default_server;
-  listen ${PROXY_HOST}:${API_HOST_PORT} default_server;
 
   server_name ${RAILS_ENV}-reverse-proxy;
 
