@@ -15,7 +15,8 @@ services:
       - db
     tty: true
     stdin_open: true
-    restart: always # コンテナが停止すると常に再起動
+    extra_hosts:
+      - "${PROXY_HOST}:host-gateway"
 
   db:
     container_name: db
@@ -27,7 +28,8 @@ services:
       - .${RAILS_ENV}.env
     ports:
       - "${DB_HOST_PORT}:${DB_CONTAINER_PORT}"
-    restart: always # コンテナが停止すると常に再起動
+    extra_hosts:
+      - "${PROXY_HOST}:host-gateway"
 
   reverse-proxy:
     image: nginx:1.25.2-alpine
@@ -37,6 +39,8 @@ services:
       - ${REVERSE_PROXY_HOST_PORT}:${REVERSE_PROXY_CONTAINER_PORT}
     env_file:
       - .${RAILS_ENV}.env
+    extra_hosts:
+      - "${PROXY_HOST}:host-gateway"
 
 volumes:
   postgres_volume:
