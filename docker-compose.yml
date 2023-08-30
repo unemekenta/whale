@@ -12,8 +12,8 @@ services:
     networks:
       whale-network:
         ipv4_address: ${API_CONTAINER_HOST}
-    ports:
-      - "${API_HOST_PORT}:${API_CONTAINER_PORT}"
+    expose:
+      - "${API_CONTAINER_PORT}"
     depends_on:
       - db
     tty: true
