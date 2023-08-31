@@ -31,8 +31,8 @@ services:
       - .${RAILS_ENV}.env
     networks:
       - whale-network
-    ports:
-      - "${DB_HOST_PORT}:${DB_CONTAINER_PORT}"
+    expose:
+      - "${DB_CONTAINER_PORT}"
     extra_hosts:
       - "${PROXY_HOST}:host-gateway"
 
