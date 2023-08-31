@@ -31,7 +31,7 @@ services:
       - .${RAILS_ENV}.env
     networks:
       whale-network:
-        ipv4_address: ${API_CONTAINER_HOST}
+        ipv4_address: ${DB_CONTAINER_HOST}
     expose:
       - "${DB_CONTAINER_PORT}"
     extra_hosts:
