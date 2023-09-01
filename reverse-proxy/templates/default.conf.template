@@ -12,7 +12,7 @@ server {
     return 403;
   }
 
-  location / {
+  location /web-api/ {
     proxy_pass http://rails-api/;
     proxy_redirect off;
   }
