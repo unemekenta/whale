@@ -71,3 +71,7 @@ database.yml
 
 */conf.d/default.conf
 */nginx.conf
+
+*.crt
+*.csr
+*.key
