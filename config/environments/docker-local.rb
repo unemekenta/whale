@@ -52,5 +52,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  config.hosts << ENV['API_HOST']
   config.hosts << "rails-api"
+  config.hosts << "127.0.0.1"
+  config.hosts << "0.0.0.0"
+  config.hosts << "localhost"
 end
