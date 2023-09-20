@@ -8,10 +8,11 @@ module Api
       def index
         session_options_skip
         diaries = Diary.where(user_id: @current_api_v1_user.id)
+          .includes(diary_comments: :user, diaries_image_relations: :image)
           .limit(INDEX_LIMIT)
           .offset(params[:offset])
           .order(date: :desc)
-        return_data('', diaries)
+        return_data('', JSON.parse(diary_res_fmt(diaries)))
       end
 
       def show
