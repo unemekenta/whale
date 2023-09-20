@@ -1,0 +1,34 @@
+name: deployment
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install SSH Key for Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          port: ${{secrets.SSH_PORT}}
+          script: |
+            cd whale
+            git pull origin main     
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install SSH Key for Start
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          port: ${{secrets.SSH_PORT}}
+          script: |
+            cd whale
+            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose --env-file .${{ secrets.APP_ENV_DEV }}.env down
+            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose --env-file .${{ secrets.APP_ENV_DEV }}.env up --build -d
