@@ -45,13 +45,13 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/whale:latest
 
-      - name: Pull from GitHub Container Registry
-        uses: actions-hub/docker@master
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_TOKEN }}
-          run: docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
+      # - name: Pull from GitHub Container Registry
+      #   uses: actions-hub/docker@master
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.repository_owner }}
+      #     password: ${{ secrets.GHCR_TOKEN }}
+      #     run: docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
 
   start:
     needs: image-push
