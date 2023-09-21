@@ -43,11 +43,12 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/$GITHUB_ACTOR/whale:latest
+          tags: ghcr.io/${{ github.repository_owner }}/whale:latest
 
       - name: Pull from GitHub Container Registry
+        uses: actions-hub/docker@master
         with:
-          run: docker pull ghcr.io/$GITHUB_ACTOR/whale:latest
+          run: docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
 
   start:
     needs: image-push
