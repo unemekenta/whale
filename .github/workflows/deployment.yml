@@ -46,7 +46,7 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/whale:latest
 
       - name: Pull from GitHub Container Registry
-      - uses: actions/checkout@v1
+        uses: actions/checkout@v1
         run: |
           echo "${{ github.token }}" | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
