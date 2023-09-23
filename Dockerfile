@@ -1,4 +1,4 @@
-FROM ruby:3.1.2
+FROM ruby:3.2.2
 
 ENV LANG C.UTF-8
 # ビルド時に実行するコマンドの指定
