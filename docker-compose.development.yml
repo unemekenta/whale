@@ -1,0 +1,3 @@
+services:
+  rails-api:
+    image: ghcr.io/${GITHUB_USERNAME}/whale:latest

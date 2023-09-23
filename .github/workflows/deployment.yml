@@ -40,16 +40,17 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Push to GitHub Container Registry
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/whale:latest
 
       - name: Pull from GitHub Container Registry
         uses: actions/checkout@v1
-        args: |
-          echo "${{ github.token }}" | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
+        with:
+          args:
+            echo "${{ github.token }}" | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+            docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
 
   start:
     needs: image-push
@@ -65,5 +66,5 @@ jobs:
           port: ${{secrets.SSH_PORT}}
           script: |
             cd whale
-            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose --env-file .${{ secrets.APP_ENV_DEV }}.env down
-            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose --env-file .${{ secrets.APP_ENV_DEV }}.env up -d
+            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose -f docker-compose.yml -f docker-compose.${{ secrets.APP_ENV_DEV }}.yml --env-file .${{ secrets.APP_ENV_DEV }}.env down
+            echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose -f docker-compose.yml -f docker-compose.${{ secrets.APP_ENV_DEV }}.yml --env-file .${{ secrets.APP_ENV_DEV }}.env up -d
