@@ -4,7 +4,7 @@ FROM ruby:3.2.2-alpine3.18
 # インストール可能なパッケージの一覧の更新
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql && \
+    apk add --no-cache linux-headers libxml2-dev make gcc libc-dev nodejs tzdata postgresql-dev postgresql file imagemagick && \
     apk add --virtual build-packages --no-cache build-base curl-dev
 
 # 作業ディレクトリの指定

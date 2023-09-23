@@ -1,6 +1,6 @@
 # オブジェクトバケット作成用
 
-require 'fog' #このプログラムはfogがインストールされている環境で動かしてね。
+require 'fog/openstack'
 
 CONOHA_TENANT_NAME = ENV['CONOHA_TENANT_NAME']
 CONOHA_USERNAME = ENV['CONOHA_USERNAME']

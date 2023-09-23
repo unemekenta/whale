@@ -1,3 +1,6 @@
+require 'carrierwave/storage/abstract'
+require 'carrierwave/storage/fog'
+
 CarrierWave.configure do |config|
 
   CONOHA_TENANT_NAME = ENV['CONOHA_TENANT_NAME']
