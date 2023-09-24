@@ -3,8 +3,7 @@ name: deployment
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+
 jobs:
   update-source:
     runs-on: ubuntu-latest
