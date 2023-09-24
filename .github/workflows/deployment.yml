@@ -52,7 +52,7 @@ jobs:
             echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker pull ghcr.io/${{ github.repository_owner }}/whale:latest
 
-   start:
+  start:
     needs: image-push
     runs-on: ubuntu-latest
     steps:
