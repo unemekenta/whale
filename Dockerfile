@@ -1,4 +1,8 @@
-FROM ruby:3.2.2-alpine3.18
+ARG GITHUB_USERNAME
+
+FROM ghcr.io/${GITHUB_USERNAME}/whale:latest
+
+ENV LANG=C.UTF-8 TZ=Asia/Tokyo
 
 # ビルド時に実行するコマンドの指定
 # インストール可能なパッケージの一覧の更新
