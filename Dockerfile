@@ -12,7 +12,6 @@ RUN apk update && \
     apk add --virtual build-packages --no-cache build-base curl-dev
 
 # 作業ディレクトリの指定
-RUN mkdir /rails-api
 WORKDIR /rails-api
 COPY Gemfile /rails-api/Gemfile
 COPY Gemfile.lock /rails-api/Gemfile.lock
