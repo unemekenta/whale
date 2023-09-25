@@ -78,7 +78,7 @@ jobs:
             echo ${{secrets.SSH_SUDO_PASSWORD}} | sudo -S sudo docker-compose -f docker-compose.yml -f docker-compose.${{ secrets.APP_ENV_DEV }}.yml --env-file .${{ secrets.APP_ENV_DEV }}.env down
             cd ..
             echo y | docker container prune
-            echo y | docker image prune
+            echo y | docker image prune -a
 
       - name: Start Docker
         uses: appleboy/ssh-action@master
