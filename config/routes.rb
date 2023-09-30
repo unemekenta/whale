@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :diaries do
+      resources :diaries, format: "json" do
         resources :diaries_image_relations, only: [:create, :destroy]
         resources :diary_comments
         collection do

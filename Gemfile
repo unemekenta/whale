@@ -52,3 +52,7 @@ gem 'devise-i18n'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'fog-openstack'
+
+gem 'kaminari'
+
+gem 'jbuilder'

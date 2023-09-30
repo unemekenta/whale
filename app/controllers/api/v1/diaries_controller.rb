@@ -4,15 +4,22 @@ module Api
       before_action :authenticate_api_v1_user!
       before_action :set_diary, only: [:update, :destroy]
       include ApiResponse
+      # include Pagination
+
+      PAGE_LIMIT = 20
+      DEFAULT_PAGE = 1
 
       def index
         session_options_skip
-        diaries = Diary.where(user_id: @current_api_v1_user.id)
+
+        now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
+
+        @diaries = Diary.where(user_id: @current_api_v1_user.id)
           .includes(diary_comments: :user, diaries_image_relations: :image)
-          .limit(INDEX_LIMIT)
-          .offset(params[:offset])
           .order(date: :desc)
-        return_data('', JSON.parse(diary_res_fmt(diaries)))
+          .page(now_page).per(PAGE_LIMIT)
+
+        render 'index', status: :ok
       end
 
       def show
