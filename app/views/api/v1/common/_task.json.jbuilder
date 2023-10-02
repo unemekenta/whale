@@ -22,7 +22,7 @@ json.user do
   json.partial! partial: 'api/v1/common/user', user: task.user
 end
 
-json.comment do
+json.comments do
   json.array! task.comments do |comment|
     json.partial! partial: 'api/v1/common/comment', comment: comment
   end

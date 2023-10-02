@@ -1,1 +1,3 @@
-json.partial! partial: 'api/v1/common/task', task: @task
+json.task do
+  json.partial! partial: 'api/v1/common/task', task: @task
+end
