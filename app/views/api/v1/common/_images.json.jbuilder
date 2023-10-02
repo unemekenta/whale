@@ -1,7 +1,5 @@
 json.images do
   json.array! images do |image|
-    json.id image.id
-    json.image image.image
-    json.caption image.caption
+    json.partial! partial: 'api/v1/common/image', image: image
   end
 end

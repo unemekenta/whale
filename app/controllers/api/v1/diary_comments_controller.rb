@@ -3,48 +3,62 @@ module Api
     class DiaryCommentsController < ApplicationController
       before_action :set_comment, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
+      before_action :set_page_params, only: [:index]
 
       include ApiResponse
+
+      PAGE_LIMIT = 20
+      DEFAULT_PAGE = 1
+
       def index
         session_options_skip
-        comments = DiaryComment.where(diary_id: params[:diary_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data('', comments)
+        @diary_comments = DiaryComment
+          .where(diary_id: params[:diary_id])
+          .includes(:user)
+          .page(@now_page).per(PAGE_LIMIT)
+
+        render 'index', status: :ok
       end
 
       def show
         session_options_skip
-        return_data('', @diary_comment)
+        render 'show', status: :ok
       end
 
       def create
         session_options_skip
         user = User.find_by(email: params[:uid])
-        comment = DiaryComment.new(content: params[:content], diary_id: params[:diary_id], user_id: user.id)
-        comment.save
-        return_data('', comment)
+        @diary_comment = DiaryComment.new(content: params[:content], diary_id: params[:diary_id], user_id: user.id)
+        if @diary_comment.save
+          render 'create', status: :ok
+        else
+          render 'create', status: :internal_server_error
+        end
       end
 
       def update
         session_options_skip
         if @diary_comment.user_id == @current_api_v1_user.id
           if @diary_comment.update(comment_params)
-            return_data('Updated the comment', @diary_comment)
+            render 'update', status: :ok
           else
-            return_data('Not updated', @diary_comment.errors)
+            render 'update', status: :internal_server_error
           end
         else
-          return_error('You are not authorized to update this comment', '')
+          render 'update', status: :unauthorized
         end
       end
 
       def destroy
         session_options_skip
-        Rails.logger.debug("ここ#{@diary_comment}")
         if @diary_comment.user_id == @current_api_v1_user.id
-          @diary_comment.destroy
-          return_data('Deleted the comment', @diary_comment)
+          if @diary_comment.destroy
+            render 'destroy', status: :ok
+          else
+            render 'destroy', status: :internal_server_error
+          end
         else
-          return_error('You are not authorized to delete this comment', '')
+          render 'destroy', status: :unauthorized
         end
       end
 
@@ -56,6 +70,10 @@ module Api
 
       def comment_params
         params.permit(:content)
+      end
+
+      def set_page_params
+        @now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
       end
     end
   end

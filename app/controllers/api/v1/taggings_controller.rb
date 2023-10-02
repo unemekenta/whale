@@ -7,23 +7,25 @@ module Api
 
       def index
         session_options_skip
-        taggings = Tagging.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data('', taggings)
+        @taggings = Tagging.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
+        render 'index', status: :ok
       end
 
       def create
-        session_options_skip
-        params[:tagging].each do |t|
-          tagging = Tagging.new(task_id: params[:task_id], tag_id: t[:tag_id])
-          tagging.save
+        ActiveRecord::Base.transaction do
+          session_options_skip
+          params[:tagging].each do |t|
+            tagging = Tagging.new(task_id: params[:task_id], tag_id: t[:tag_id])
+            tagging.save!
+          end
+          head :ok
         end
-        return_data('', "")
       end
 
       def destroy
         session_options_skip
         @tagging.destroy
-        return_data('Deleted the tagging', @tagging)
+        render 'destroy', status: :ok
       end
 
       private

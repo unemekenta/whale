@@ -6,7 +6,8 @@ module Api
 
       def index
         session_options_skip
-        return_data('', current_api_v1_user)
+        @user = current_api_v1_user
+        render 'index', status: :ok
       end
     end
   end

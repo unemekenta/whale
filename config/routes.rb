@@ -4,32 +4,32 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
 
-      namespace :auth do
-        resources :sessions, only: %i[index]
+      namespace :auth, format: "json" do
+        resources :sessions, format: "json", only: %i[index]
       end
 
-      resources :tasks do
-        resources :comments
-        resources :taggings, only: [:index, :create, :destroy]
+      resources :tasks, format: "json" do
+        resources :comments, format: "json"
+        resources :taggings, format: "json", only: [:index, :create, :destroy]
       end
 
-      resources :tags do
+      resources :tags, format: "json" do
         collection do
           get 'search', to: 'tags#search'
         end
       end
 
       resources :diaries, format: "json" do
-        resources :diaries_image_relations, only: [:create, :destroy]
-        resources :diary_comments
+        resources :diaries_image_relations, format: "json", only: [:create, :destroy]
+        resources :diary_comments, format: "json"
         collection do
           get 'timeline', to: 'diaries#timeline'
         end
       end
 
-      resources :images, only: [:index, :show, :create, :destroy]
+      resources :images, format: "json", only: [:index, :show, :create, :destroy]
 
-      resources :information_contents, only: [:index]
+      resources :information_contents, format: "json", only: [:index]
     end
   end
 end

@@ -3,47 +3,60 @@ module Api
     class CommentsController < ApplicationController
       before_action :set_comment, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
+      before_action :set_page_params, only: [:index]
+
       include ApiResponse
+
+      PAGE_LIMIT = 20
+      DEFAULT_PAGE = 1
 
       def index
         session_options_skip
-        comments = Comment.where(task_id: params[:task_id]).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data('', comments)
+        @comments = Comment
+          .where(task_id: params[:task_id])
+          .page(@now_page).per(PAGE_LIMIT)
+        render 'index', status: :ok
       end
 
       def show
         session_options_skip
-        return_data('', @comment)
+        render 'show', status: :ok
       end
 
       def create
         session_options_skip
         user = User.find_by(email: params[:uid])
-        comment = Comment.new(content: params[:content], task_id: params[:task_id], user_id: user.id)
-        comment.save
-        return_data('', comment)
+        @comment = Comment.new(content: params[:content], task_id: params[:task_id], user_id: user.id)
+        if @comment.save
+          render 'create', status: :ok
+        else
+          render 'create', status: :internal_server_error
+        end
       end
 
       def update
         session_options_skip
         if @comment.user_id == @current_api_v1_user.id
           if @comment.update(comment_params)
-            return_data('Updated the comment', @comment)
+            render 'update', status: :ok
           else
-            return_data('Not updated', @comment.errors)
+            render 'update', status: :internal_server_error
           end
         else
-          return_error('You are not authorized to update this comment', '')
+          ender 'update', status: :unauthorized
         end
       end
 
       def destroy
         session_options_skip
         if @comment.user_id == @current_api_v1_user.id
-          @comment.destroy
-          return_data('Deleted the comment', @comment)
+          if @comment.destroy
+            render 'destroy', status: :ok
+          else
+            render 'destroy', status: :internal_server_error
+          end
         else
-          return_error('You are not authorized to delete this comment', '')
+          render 'destroy', status: :unauthorized
         end
       end
 
@@ -51,6 +64,10 @@ module Api
       def set_comment
         session_options_skip
         @comment = Comment.find(params[:id])
+      end
+
+      def set_page_params
+        @now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
       end
 
       def comment_params
