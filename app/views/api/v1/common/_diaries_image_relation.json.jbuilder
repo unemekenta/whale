@@ -1,0 +1,3 @@
+json.id diaries_image_relation.id
+json.diary_id diaries_image_relation.diary_id
+json.image_id diaries_image_relation.image_id

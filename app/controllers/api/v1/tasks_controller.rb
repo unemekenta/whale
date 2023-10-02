@@ -3,55 +3,63 @@ module Api
     class TasksController < ApplicationController
       before_action :set_task, only: [:show, :update, :destroy]
       before_action :authenticate_api_v1_user!
+      before_action :set_page_params, only: [:index]
+
       include ApiResponse
+
+      PAGE_LIMIT = 20
+      DEFAULT_PAGE = 1
 
       def index
         session_options_skip
-        tasks = Task.where(user_id: @current_api_v1_user.id).limit(INDEX_LIMIT).offset(params[:offset])
-        return_data('', JSON.parse(task_res_fmt(tasks)))
+        @tasks = Task.where(user_id: @current_api_v1_user.id)
+          .page(@now_page).per(PAGE_LIMIT)
+        render 'index', status: :ok
       end
 
       def create
+        # TODO: transactionの整合性確認
         ActiveRecord::Base.transaction do
           session_options_skip
-          user = User.find_by(email: params[:uid])
-          task = Task.new(title: params[:title], description: params[:description], user_id: user.id, priority: params[:priority], status: params[:status], deadline: params[:deadline])
-          task.save
+          user = User.find_by!(email: params[:uid])
+          @task = Task.new(title: params[:title], description: params[:description], user_id: user.id, priority: params[:priority], status: params[:status], deadline: params[:deadline])
+          @task.save!
 
           # TODO: 重複を許さないように
           params[:taggings].each do |t|
-            tagging = Tagging.new(task_id: task.id, tag_id: t[:tag_id])
-            tagging.save
+            tagging = Tagging.new(task_id: @task.id, tag_id: t[:tag_id])
+            tagging.save!
           end
-          return_data('', task)
+          render 'create', status: :ok
         end
       end
 
       def show
         session_options_skip
         if @task.user_id == @current_api_v1_user.id
-          return_data('', JSON.parse(task_res_fmt(@task)))
+          render 'show', status: :ok
         else
-          return_error('You are not authorized to delete this task', '')
+          render 'show', status: :unauthorized
         end
       end
 
       def update
+        # TODO: transactionの整合性確認
         ActiveRecord::Base.transaction do
           if @task.user_id == @current_api_v1_user.id
-            if @task.update(task_params)
+            if @task.update!(task_params)
               # TODO: リファクタ
               @tagging.destroy_all
               params[:taggings].each do |t|
                 tagging = Tagging.new(task_id: @task.id, tag_id: t[:tag_id])
-                tagging.save
+                tagging.save!
               end
-              return_data('Updated the task', @task)
+              render 'update', status: :ok
             else
-              return_error('Not updated', @task.errors)
+              render 'update', status: :bad_request
             end
           else
-            return_error('You are not authorized to update this task', '')
+            render 'update', status: :unauthorized
           end
         end
       end
@@ -59,10 +67,13 @@ module Api
       def destroy
         session_options_skip
         if @task.user_id == @current_api_v1_user.id
-          @task.destroy
-          return_data('Deleted the task', @task)
+          if @task.destroy
+            render 'destroy', status: :ok
+          else
+            render 'destroy', status: :internal_server_error
+          end
         else
-          return_error('You are not authorized to delete this task', '')
+          render 'destroy', status: :unauthorized
         end
       end
 
@@ -79,6 +90,10 @@ module Api
 
       def task_res_fmt(task)
         task.to_json(include: [:tags, user: {only: [:id, :nickname, :image]}, taggings:{only: [:tag_id]}, comments: {include: {user: {only: [:id, :nickname, :image]}}}], except: [:created_at, :user_id])
+      end
+
+      def set_page_params
+        @now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
       end
 
     end
