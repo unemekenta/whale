@@ -8,7 +8,7 @@ json.updated_at task.updated_at
 
 json.tags do
   json.array! task.tags do |tag|
-    json.partial! partial: 'api/v1/common/tag', tags: tag
+    json.partial! partial: 'api/v1/common/tag', tag: tag
   end
 end
 

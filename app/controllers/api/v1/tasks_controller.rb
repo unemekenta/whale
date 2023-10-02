@@ -88,10 +88,6 @@ module Api
         params.permit(:title, :description, :priority, :status, :deadline, :taggings)
       end
 
-      def task_res_fmt(task)
-        task.to_json(include: [:tags, user: {only: [:id, :nickname, :image]}, taggings:{only: [:tag_id]}, comments: {include: {user: {only: [:id, :nickname, :image]}}}], except: [:created_at, :user_id])
-      end
-
       def set_page_params
         @now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
       end
