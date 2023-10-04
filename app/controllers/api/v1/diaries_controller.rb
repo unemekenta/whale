@@ -15,7 +15,7 @@ module Api
         @diaries = Diary.where(user_id: @current_api_v1_user.id)
           .includes(diary_comments: :user, diaries_image_relations: :image)
           .order(date: :desc)
-          .page(@now_page).per(2)
+          .page(@now_page).per(PAGE_LIMIT)
 
         render 'index', status: :ok
       end
