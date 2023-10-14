@@ -1,6 +1,4 @@
-ARG GITHUB_USERNAME
-
-FROM ghcr.io/${GITHUB_USERNAME}/whale:latest
+FROM ruby:3.2.2-alpine
 
 ENV LANG=C.UTF-8 TZ=Asia/Tokyo
 
