@@ -10,4 +10,11 @@ class Task < ApplicationRecord
     on_hold: 3,
     completed: 4
   }
+
+  enum priority: {
+    emergency: 1,
+    high: 2,
+    normal: 3,
+    low: 4
+  }
 end
