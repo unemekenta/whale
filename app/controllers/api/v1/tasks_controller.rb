@@ -13,6 +13,8 @@ module Api
       def index
         session_options_skip
         @tasks = Task.where(user_id: @current_api_v1_user.id)
+          .where(@status == 'all' ? nil : { status: Task.statuses[@status] })
+          .order("#{@sort} #{@order}")
           .page(@now_page).per(PAGE_LIMIT)
         render 'index', status: :ok
       end
@@ -90,6 +92,9 @@ module Api
 
       def set_page_params
         @now_page = params[:page]? params[:page].to_i : DEFAULT_PAGE
+        @status = params[:status]? params[:status] : 'all'
+        @sort = params[:sort]? params[:sort] : 'created_at'
+        @order = params[:order]? params[:order] : 'desc'
       end
 
     end
