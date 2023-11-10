@@ -20,8 +20,16 @@ jobs:
             cd whale
             git pull origin main
 
-  image-push:
+  run-test:
     needs: update-source
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run rspec test
+        run: bundle exec rspec
+
+  image-push:
+    needs: run-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
