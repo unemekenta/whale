@@ -31,7 +31,7 @@ jobs:
       - name: Set up Ruby 3.2
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.x
+          ruby-version: 3.2.2
       - name: Test with Rspec
         run: |
           gem install bundler
