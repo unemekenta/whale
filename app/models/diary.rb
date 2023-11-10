@@ -3,4 +3,6 @@ class Diary < ApplicationRecord
   has_many :diaries_image_relations
   has_many :images, through: :diaries_image_relations
   has_many :diary_comments, foreign_key: "diary_id", dependent: :destroy
+
+  validates :user_id, :title, :is_public, :date, presence: true
 end
