@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
   has_many :diary_comments, dependent: :destroy
 
   validates :provider, :uid, :encrypted_password, presence: true
+  validates :name, length: { maximum: 20 }
+  validates :nickname, length: { maximum: 20 }
 
   def self.check_user_id(user_id, current_user_id)
     unless user_id.to_i == current_user_id.to_i

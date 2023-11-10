@@ -5,6 +5,8 @@ class Task < ApplicationRecord
   has_many :comments, foreign_key: "task_id", dependent: :destroy
 
   validates :user_id, :title, :priority, :status, :deadline, presence: true
+  validates :title, length: { maximum: 50 }
+  validates :description, length: { maximum: 10000 }
 
   enum status: {
     not_started: 1,
