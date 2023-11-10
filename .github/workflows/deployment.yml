@@ -35,7 +35,7 @@ jobs:
       - name: Test with Rspec
         run: |
           gem install bundler
-          bundle install --quiet --jobs 4 --retry 3
+          bundle install
           bundle exec rspec
 
   image-push:
