@@ -10,7 +10,7 @@ CarrierWave.configure do |config|
   CONOHA_CONTAINER_NAME = ENV['CONOHA_CONTAINER_NAME']
   CONOHA_ASSET_HOST = ENV['CONOHA_ASSET_HOST']
 
-  if ENV['RAILS_ENV'] == 'local' || ENV['RAILS_ENV'] == 'docker-local'
+  if ENV['RAILS_ENV'] == 'local' || ENV['RAILS_ENV'] == 'docker-local' || ENV['RAILS_ENV'] == 'test'
     config.asset_host = ENV['CONOHA_ASSET_HOST']
     config.storage = :file
     config.cache_storage = :file
