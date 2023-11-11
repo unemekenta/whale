@@ -28,17 +28,13 @@ jobs:
     services:
       # Label used to access the service container
       postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
+        image: postgres:14
+        ports:
+          - 5432:5432
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          POSTGRES_DB: whale_test
 
     steps:
       - uses: actions/checkout@v2
@@ -56,8 +52,8 @@ jobs:
       - name: Setup Database
         run: |
           cp config/database.yml.ci config/database.yml
-          bin/rails db:create
-          bin/rails db:migrate
+          bundle exec rails db:create
+          bundle exec rails db:migrate
         env:
           RAILS_ENV: test
       - name: Test with Rspec
