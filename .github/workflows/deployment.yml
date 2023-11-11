@@ -52,8 +52,8 @@ jobs:
       - name: Setup Database
         run: |
           cp config/database.yml.ci config/database.yml
-          bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
+          bundle exec rails db:create
+          bundle exec rails db:migrate
         env:
           RAILS_ENV: test
       - name: Test with Rspec
