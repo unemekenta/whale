@@ -32,16 +32,30 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
-      - name: Database create and migrate
+      #MySQLをインストール
+      - name: Install dependent libralies
         run: |
-          cp config/database.yml.ci config/database.yml
-          bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
-      - name: Test with Rspec
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+      #test用に用意したdatabase.yml.ciをコピー、テスト環境用のDBを作成
+      - name: Setup bundler
         run: |
           gem install bundler
-          bundle install
+          bundle install --jobs 4 --retry 3
+        env:
+          RAILS_ENV: test
+      - name: Setup Database
+        run: |
+          cp config/database.yml.ci config/database.yml
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+        env:
+          RAILS_ENV: test
+      - name: Test with Rspec
+        run: |
           bundle exec rspec
+        env:
+          RAILS_ENV: test
 
   image-push:
     needs: run-test
