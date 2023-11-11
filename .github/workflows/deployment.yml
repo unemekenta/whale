@@ -32,11 +32,11 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
-      #MySQLをインストール
+      #Postgresをインストール
       - name: Install dependent libralies
         run: |
           sudo apt-get update
-          sudo apt-get install -y mysql-server
+          sudo apt-get install -y postgresql postgresql-contrib libpq-dev
       #test用に用意したdatabase.yml.ciをコピー、テスト環境用のDBを作成
       - name: Setup bundler
         run: |
