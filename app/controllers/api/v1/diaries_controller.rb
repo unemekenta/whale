@@ -22,12 +22,18 @@ module Api
 
       def show
         session_options_skip
-        @diary = Diary.includes(diary_comments: :user, diaries_image_relations: :image)
-          .where("(id = ? AND user_id = ?) OR (id = ? AND is_public = ?)",
-            params[:id], @current_api_v1_user&.id,
-            params[:id], true)
-          .first
+        @diary = Diary
+          .includes(diary_comments: :user, diaries_image_relations: :image)
+          .find_by(id: params[:id], is_public: true)
         render 'show', status: :ok
+      end
+
+      def edit
+        session_options_skip
+        @diary = Diary
+          .includes(diary_comments: :user, diaries_image_relations: :image)
+          .find_by(id: params[:id], user_id: @current_api_v1_user.id)
+        render 'edit', status: :ok
       end
 
       def create

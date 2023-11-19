@@ -20,6 +20,9 @@ Rails.application.routes.draw do
       end
 
       resources :diaries, format: "json" do
+        member do
+          get :edit
+        end
         resources :diaries_image_relations, format: "json", only: [:create, :destroy]
         resources :diary_comments, format: "json"
         collection do
