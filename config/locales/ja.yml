@@ -15,6 +15,10 @@ ja:
   activerecord:
     errors:
       models:
+        user:
+          attributes:
+            password:
+              too_short: "が短すぎます"
         image:
           attributes:
             image:

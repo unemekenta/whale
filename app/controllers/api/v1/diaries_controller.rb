@@ -1,7 +1,7 @@
 module Api
   module V1
     class DiariesController < ApplicationController
-      before_action :authenticate_api_v1_user!
+      before_action :authenticate_api_v1_user!, except: [:timeline, :show]
       before_action :set_diary, only: [:update, :destroy]
       before_action :set_page_params, only: [:index, :timeline]
 
@@ -24,7 +24,7 @@ module Api
         session_options_skip
         @diary = Diary.includes(diary_comments: :user, diaries_image_relations: :image)
           .where("(id = ? AND user_id = ?) OR (id = ? AND is_public = ?)",
-            params[:id], @current_api_v1_user.id,
+            params[:id], @current_api_v1_user&.id,
             params[:id], true)
           .first
         render 'show', status: :ok

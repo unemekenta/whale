@@ -14,7 +14,6 @@ class User < ActiveRecord::Base
   has_many :diaries, dependent: :destroy
   has_many :diary_comments, dependent: :destroy
 
-  validates :provider, :uid, :encrypted_password, presence: true
   validates :name, length: { maximum: 20 }
   validates :nickname, length: { maximum: 20 }
 
