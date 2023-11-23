@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
-  include DeviseTokenAuth::Concerns::SetUserByToken
+  include DeviseTokenAuth::Concerns::SetUserByToken #current_userやuser_signed_in?などのヘルパーメソッドを提供するためのコードが含まれたモジュール
+
   before_action do
     I18n.locale = :ja
   end
