@@ -7,8 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # origins /^.*#{Regexp.escape(ENV['FRONT_HOST'])}.*$/
-    origins "*"
+    origins /^.*#{Regexp.escape(ENV['FRONT_HOST'])}.*$/
 
     resource '*',
       headers: :any,
