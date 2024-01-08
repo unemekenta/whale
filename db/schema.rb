@@ -11,10 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "comments", force: :cascade do |t|
+  create_table "comments", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "task_id", null: false
     t.text "content"
@@ -24,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "diaries", force: :cascade do |t|
+  create_table "diaries", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title"
     t.text "content"
@@ -35,7 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["user_id"], name: "index_diaries_on_user_id"
   end
 
-  create_table "diaries_image_relations", force: :cascade do |t|
+  create_table "diaries_image_relations", charset: "utf8", force: :cascade do |t|
     t.bigint "diary_id", null: false
     t.bigint "image_id", null: false
     t.datetime "created_at", null: false
@@ -45,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["image_id"], name: "index_diaries_image_relations_on_image_id"
   end
 
-  create_table "diary_comments", force: :cascade do |t|
+  create_table "diary_comments", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "diary_id", null: false
     t.text "content"
@@ -55,7 +52,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["user_id"], name: "index_diary_comments_on_user_id"
   end
 
-  create_table "images", force: :cascade do |t|
+  create_table "images", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "image", null: false
     t.string "image_content_type"
@@ -67,7 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["user_id"], name: "index_images_on_user_id"
   end
 
-  create_table "information_contents", force: :cascade do |t|
+  create_table "information_contents", charset: "utf8", force: :cascade do |t|
     t.string "content", null: false
     t.string "link"
     t.boolean "display_link", default: false, null: false
@@ -77,7 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "taggings", force: :cascade do |t|
+  create_table "taggings", charset: "utf8", force: :cascade do |t|
     t.bigint "tag_id", null: false
     t.bigint "task_id", null: false
     t.datetime "created_at", null: false
@@ -87,14 +84,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["task_id"], name: "index_taggings_on_task_id"
   end
 
-  create_table "tags", force: :cascade do |t|
+  create_table "tags", charset: "utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tags_on_name"
   end
 
-  create_table "tasks", force: :cascade do |t|
+  create_table "tasks", charset: "utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title"
     t.text "description"
@@ -106,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", charset: "utf8", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -122,7 +119,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_29_024019) do
     t.string "nickname"
     t.string "image"
     t.string "email"
-    t.json "tokens"
+    t.text "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sign_in_count", default: 0, null: false

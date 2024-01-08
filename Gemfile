@@ -59,3 +59,5 @@ gem 'fog-openstack'
 gem 'kaminari'
 
 gem 'jbuilder'
+
+gem 'mysql2'
