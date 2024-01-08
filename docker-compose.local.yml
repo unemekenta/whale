@@ -2,6 +2,3 @@ services:
   rails-api:
     ports:
       - "${API_HOST_PORT}:${API_CONTAINER_PORT}"
-  db:
-    ports:
-      - "${DB_HOST_PORT}:${DB_CONTAINER_PORT}"

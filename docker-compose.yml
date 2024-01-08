@@ -23,22 +23,6 @@ services:
     extra_hosts:
       - "${PROXY_HOST}:host-gateway"
 
-  db:
-    container_name: db
-    image: postgres:14.7-alpine
-    volumes:
-      - postgres_volume:/var/lib/postgresql/data
-    command: "postgres -c 'max_connections=500'"
-    env_file:
-      - .${RAILS_ENV}.env
-    networks:
-      whale-network:
-        ipv4_address: ${DB_CONTAINER_HOST}
-    expose:
-      - "${DB_CONTAINER_PORT}"
-    extra_hosts:
-      - "${PROXY_HOST}:host-gateway"
-
   reverse-proxy:
     image: nginx:1.25.2-alpine
     volumes:
@@ -53,9 +37,6 @@ services:
       - whale-network
     depends_on:
       - rails-api
-
-volumes:
-  postgres_volume:
 
 networks:
   whale-network:
