@@ -27,13 +27,12 @@ jobs:
       RAILS_ENV: test
     services:
       # Label used to access the service container
-      postgres:
-        image: postgres:14
+      db:
+        image: mysql2
         ports:
-          - 5432:5432
+          - 3306:3306
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: root
           POSTGRES_DB: whale_test
 
     steps:
