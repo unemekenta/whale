@@ -7,14 +7,14 @@ RSpec.describe User, type: :model do
 
     context 'nameカラム' do
       it '20文字以下であること' do
-        user.name = EnFaker::Lorem.characters(number:21)
+        user.name = ::EnFaker::Lorem.characters(number:21)
         expect(user.valid?).to eq false;
       end
     end
 
     context 'nicknameカラム' do
       it '20文字以下であること' do
-        user.nickname = EnFaker::Lorem.characters(number:21)
+        user.nickname = ::EnFaker::Lorem.characters(number:21)
         expect(user.valid?).to eq false;
       end
     end

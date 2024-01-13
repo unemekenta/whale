@@ -12,14 +12,14 @@ RSpec.describe Task, type: :model do
       end
 
       it '50文字以内であること' do
-        task.title = EnFaker::Lorem.characters(number:51)
+        task.title = ::EnFaker::Lorem.characters(number:51)
         expect(task.valid?).to eq false
       end
     end
 
     context 'description' do
       it '10000文字以内であること' do
-        task.description = EnFaker::Lorem.characters(number:10001)
+        task.description = ::EnFaker::Lorem.characters(number:10001)
         expect(task.valid?).to eq false
       end
     end

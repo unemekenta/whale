@@ -12,7 +12,7 @@ RSpec.describe Comment, type: :model do
       end
 
       it '1000文字以内であること' do
-        comment.content = EnFaker::Lorem.characters(number:1001)
+        comment.content = ::EnFaker::Lorem.characters(number:1001)
         expect(comment.valid?).to eq false
       end
     end

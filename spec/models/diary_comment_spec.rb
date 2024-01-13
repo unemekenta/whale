@@ -12,7 +12,7 @@ RSpec.describe DiaryComment, type: :model do
       end
 
       it '1000文字以内であること' do
-        diary_comment.content = EnFaker::Lorem.characters(number:1001)
+        diary_comment.content = ::EnFaker::Lorem.characters(number:1001)
         expect(diary_comment.valid?).to eq false
       end
     end
