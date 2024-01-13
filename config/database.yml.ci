@@ -11,4 +11,3 @@ default: &default
 test:
   <<: *default
   database: whale_test
-  host: host.docker.internal
