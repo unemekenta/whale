@@ -11,9 +11,17 @@ module Api
 
       def index
         session_options_skip
-        @information_contents = InformationContent.where("start_at <= ? AND end_at >= ?", format_unixtime_to_datetime(params[:start_at]), format_unixtime_to_datetime(params[:end_at]))
-          .order(:updated_at)
-          .page(@now_page).per(PAGE_LIMIT)
+        @information_contents = InformationContent
+
+        if params[:start_at]
+          @information_contents = @information_contents.where("start_at >= ?", format_unixtime_to_datetime(params[:start_at]))
+        end
+
+        if params[:end_at]
+          @information_contents = @information_contents.where("end_at <= ?", format_unixtime_to_datetime(params[:end_at]))
+        end
+
+        @information_contents = @information_contents.order(:updated_at).page(@now_page).per(PAGE_LIMIT)
 
         render 'index', status: :ok
       end

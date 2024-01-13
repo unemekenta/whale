@@ -1,11 +1,11 @@
 # spec/factories/tasks.rb
 FactoryBot.define do
   factory :task do
-    title { Faker::Lorem.sentence }
-    description { Faker::Lorem.paragraph }
+    title { EnFaker::Lorem.sentence }
+    description { EnFaker::Lorem.paragraph }
     status { 'not_started' }
     priority { 'normal' }
-    deadline { Faker::Time.forward(days: 7) }
+    deadline { EnFaker::Time.forward(days: 7) }
     association :user
   end
 end
