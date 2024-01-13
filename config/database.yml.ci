@@ -1,11 +1,11 @@
 # workflowのテスト実行用
 default: &default
-  adapter: postgresql
+  adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  encoding: unicode
-  username: postgres
-  password: postgres
+  encoding: utf8mb4
+  username: root
+  password:
   host: 127.0.0.1
 
 test:

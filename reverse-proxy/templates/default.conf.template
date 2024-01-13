@@ -1,17 +1,26 @@
 # HTTPS server
 server {
+  # Nginxが443ポートでリッスンし、SSLを使用するように
   listen ${REVERSE_PROXY_HTTPS_HOST_PORT} ssl;
 
+  # このサーバーブロックが応答するホスト名
   server_name ${NGINX_SERVER_NAME};
 
+  # SSL証明書のパス
   ssl_certificate /etc/nginx/ssl/server.crt;
+  # SSL証明書の秘密鍵のパス
   ssl_certificate_key /etc/nginx/ssl/server.key;
 
+  # SSLセッションのキャッシュ設定
   ssl_session_cache shared:SSL:1m;
+  # SSLセッションのタイムアウト時間
   ssl_session_timeout 5m;
+  # 使用する暗号スイート
   ssl_ciphers HIGH:!aNULL:!MD5;
+  # クライアントとサーバーの両方がサポートする暗号スイートが複数ある場合、サーバーの設定を優先
   ssl_prefer_server_ciphers on;
 
+  # サーバの指示通りにリダイレクト
   proxy_redirect off;
   proxy_set_header Host $host;
   proxy_set_header X-Real-IP $remote_addr;
@@ -29,7 +38,17 @@ server {
   }
 
   location /web-api/ {
+    # reverse-proxy/nginx.confのupstreamで規定されているrails-apiに振り分け
     proxy_pass http://rails-api/;
     proxy_redirect off;
   }
+}
+
+upstream rails-api {
+  server ${API_CONTAINER_HOST}:${API_CONTAINER_PORT};
+}
+
+geo $ALLOW_IPS {
+  ${HOME_IP} true;
+  default false;
 }
