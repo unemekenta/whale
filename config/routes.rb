@@ -8,6 +8,8 @@ Rails.application.routes.draw do
         resources :sessions, format: "json", only: %i[index]
       end
 
+      resources :users, format: "json", only: [:show]
+
       resources :tasks, format: "json" do
         resources :comments, format: "json"
         resources :taggings, format: "json", only: [:index, :create, :destroy]

@@ -14,6 +14,7 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+# github workflowのtest日本語だと通らないため
 require 'helper/en_faker'
 
 RSpec.configure do |config|

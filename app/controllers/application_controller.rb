@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   # user情報を変更可能にする例
   def configure_permitted_parameters
     request.session_options[:skip] = true
-    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :nickname, :image])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :nickname, :image, :introduction])
   end
 
   INDEX_LIMIT = 1000

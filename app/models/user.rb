@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
 
   validates :name, length: { maximum: 20 }
   validates :nickname, length: { maximum: 20 }
+  validates :introduction, length: { maximum: 1000 }
 
   def self.check_user_id(user_id, current_user_id)
     unless user_id.to_i == current_user_id.to_i
