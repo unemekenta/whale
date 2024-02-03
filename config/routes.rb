@@ -28,7 +28,7 @@ Rails.application.routes.draw do
           get :edit
         end
         resources :diaries_image_relations, format: "json", only: [:create, :destroy]
-        resources :diary_comments, format: "json", only: [:create]
+        resources :diary_comments
         collection do
           get 'timeline', to: 'diaries#timeline'
         end
