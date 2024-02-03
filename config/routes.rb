@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
       resources :users, format: "json", only: [:show]
 
+      resources :diary_comments, format: "json", only: [:index, :show, :edit, :update, :destroy]
+
       resources :tasks, format: "json" do
         resources :comments, format: "json"
         resources :taggings, format: "json", only: [:index, :create, :destroy]
@@ -26,7 +28,7 @@ Rails.application.routes.draw do
           get :edit
         end
         resources :diaries_image_relations, format: "json", only: [:create, :destroy]
-        resources :diary_comments, format: "json"
+        resources :diary_comments, format: "json", only: [:create]
         collection do
           get 'timeline', to: 'diaries#timeline'
         end

@@ -1,7 +1,7 @@
 module Api
   module V1
     class DiaryCommentsController < ApplicationController
-      before_action :set_comment, only: [:show, :update, :destroy]
+      before_action :set_comment, only: [:show, :edit, :update, :destroy]
       before_action :authenticate_api_v1_user!
       before_action :set_page_params, only: [:index]
 
@@ -13,8 +13,8 @@ module Api
       def index
         session_options_skip
         @diary_comments = DiaryComment
-          .where(diary_id: params[:diary_id])
-          .includes(:user)
+          .where(user_id: current_api_v1_user.id)
+          .includes(:diary)
           .page(@now_page).per(PAGE_LIMIT)
 
         render 'index', status: :ok
@@ -27,8 +27,7 @@ module Api
 
       def create
         session_options_skip
-        user = User.find_by(email: params[:uid])
-        @diary_comment = DiaryComment.new(content: params[:content], diary_id: params[:diary_id], user_id: user.id)
+        @diary_comment = DiaryComment.new(content: params[:content], diary_id: params[:diary_id], user_id: current_api_v1_user.id)
         if @diary_comment.save
           render 'create', status: :ok
         else
@@ -36,9 +35,14 @@ module Api
         end
       end
 
+      def edit
+        session_options_skip
+        render 'edit', status: :ok
+      end
+
       def update
         session_options_skip
-        if @diary_comment.user_id == @current_api_v1_user.id
+        if @diary_comment.user_id == current_api_v1_user.id
           if @diary_comment.update(comment_params)
             render 'update', status: :ok
           else
@@ -51,7 +55,7 @@ module Api
 
       def destroy
         session_options_skip
-        if @diary_comment.user_id == @current_api_v1_user.id
+        if @diary_comment.user_id == current_api_v1_user.id
           if @diary_comment.destroy
             render 'destroy', status: :ok
           else
@@ -65,7 +69,7 @@ module Api
       private
       def set_comment
         session_options_skip
-        @diary_comment = DiaryComment.find(params[:id])
+        @diary_comment = DiaryComment.find_by(id: params[:id], user_id: current_api_v1_user.id)
       end
 
       def comment_params

@@ -24,8 +24,7 @@ module Api
         # TODO: transactionの整合性確認
         ActiveRecord::Base.transaction do
           session_options_skip
-          user = User.find_by!(email: params[:uid])
-          @task = Task.new(title: params[:title], description: params[:description], user_id: user.id, priority: params[:priority], status: params[:status], deadline: params[:deadline])
+          @task = Task.new(title: params[:title], description: params[:description], user_id: @current_api_v1_user.id, priority: params[:priority], status: params[:status], deadline: params[:deadline])
           @task.save!
 
           # TODO: 重複を許さないように

@@ -25,8 +25,7 @@ module Api
 
       def create
         session_options_skip
-        user = User.find_by(email: params[:uid])
-        @comment = Comment.new(content: params[:content], task_id: params[:task_id], user_id: user.id)
+        @comment = Comment.new(content: params[:content], task_id: params[:task_id], user_id: current_api_v1_user.id)
         if @comment.save
           render 'create', status: :ok
         else

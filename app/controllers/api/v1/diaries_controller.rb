@@ -39,8 +39,8 @@ module Api
       def create
         ActiveRecord::Base.transaction do
           session_options_skip
-          user = User.find_by(email: params[:uid])
-          @diary = Diary.new(title: params[:title], content: params[:content], is_public: params[:is_public], date: params[:date], user_id: user.id)
+
+          @diary = Diary.new(title: params[:title], content: params[:content], is_public: params[:is_public], date: params[:date], user_id: current_api_v1_user.id)
           @diary.save!
 
           if params[:diaries_image_relations].present?
